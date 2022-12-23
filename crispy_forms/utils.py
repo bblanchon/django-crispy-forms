@@ -108,8 +108,8 @@ def render_field(  # noqa: C901
                 logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
 
         if hasattr(form, "rendered_fields"):
-            if field not in form.rendered_fields:  # type:ignore [attr-defined]
-                form.rendered_fields.add(field)  # type:ignore [attr-defined]
+            if field not in form.rendered_fields:
+                form.rendered_fields.add(field)
             else:
                 if not FAIL_SILENTLY:
                     raise Exception("A field should only be rendered once: %s" % field)

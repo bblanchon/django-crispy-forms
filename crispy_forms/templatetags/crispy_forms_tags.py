@@ -105,8 +105,7 @@ class BasicNode(template.Node):
                 template.Variable(self.form),
                 template.Variable(self.helper) if self.helper else None,
             )
-        # https://github.com/typeddjango/django-stubs/pull/1040
-        form, helper = context.render_context[self]  # type: ignore [index]
+        form, helper = context.render_context[self]
 
         actual_form = form.resolve(context)
         if self.helper is not None:
@@ -129,9 +128,8 @@ class BasicNode(template.Node):
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
         node_context = context.__copy__()
-        # https://github.com/typeddjango/django-stubs/pull/1012
-        node_context.update({"is_bound": actual_form.is_bound})  # type: ignore [attr-defined]
-        node_context.update(response_dict)  # type: ignore [attr-defined]
+        node_context.update({"is_bound": actual_form.is_bound})
+        node_context.update(response_dict)
         final_context = node_context.__copy__()
 
         # If we have a helper's layout we use it, for the form or the formset's forms
@@ -144,9 +142,8 @@ class BasicNode(template.Node):
                 forloop = ForLoopSimulator(actual_form)
                 helper.render_hidden_fields = True
                 for form in actual_form:
-                    # https://github.com/typeddjango/django-stubs/pull/1012
-                    node_context.update({"forloop": forloop})  # type: ignore [attr-defined]
-                    node_context.update({"formset_form": form})  # type: ignore [attr-defined]
+                    node_context.update({"forloop": forloop})
+                    node_context.update({"formset_form": form})
                     form.form_html = helper.render_layout(form, node_context, template_pack=self.template_pack)
                     forloop.iterate()
 
@@ -155,8 +152,7 @@ class BasicNode(template.Node):
         else:
             final_context["form"] = actual_form
 
-        # https://github.com/typeddjango/django-stubs/pull/1012
-        return final_context  # type: ignore [return-value]
+        return final_context
 
     def get_response_dict(self, helper: FormHelper, context: Context, is_formset: bool) -> Dict[str, Union[str, bool]]:
         """

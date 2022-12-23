@@ -92,7 +92,7 @@ class CrispyFieldNode(template.Node):
                 self.attrs,
             )
 
-        field, attrs = context.render_context[self]  # type: ignore [index]
+        field, attrs = context.render_context[self]
         field = field.resolve(context)
 
         # There are special django widgets that wrap actual widgets,

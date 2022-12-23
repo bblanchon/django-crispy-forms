@@ -332,8 +332,7 @@ class FormActions(LayoutObject):
         html = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
         context.update({"formactions": self, "fields_output": html})
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class InlineCheckboxes(Field):
@@ -623,8 +622,7 @@ class StrictButton(TemplateNameMixin):
         self.content = Template(str(self.content)).render(context)
         template = self.get_template_name(template_pack)
         context.update({"button": self})
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class Container(Div):
@@ -811,8 +809,7 @@ class Tab(Container):
         with active if needed.
         """
         link_template = self.link_template % template_pack
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(link_template, {"link": self})  # type: ignore [return-value]
+        return render_to_string(link_template, {"link": self})
 
 
 class TabHolder(ContainerHolder):
@@ -874,8 +871,7 @@ class TabHolder(ContainerHolder):
 
         context.update({"tabs": self, "links": links, "content": content})
         template = self.get_template_name(template_pack)
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class AccordionGroup(Container):
@@ -1005,8 +1001,7 @@ class Accordion(ContainerHolder):
         template = self.get_template_name(template_pack)
         context.update({"accordion": self, "content": content})
 
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class Alert(Div):
@@ -1082,8 +1077,7 @@ class Alert(Div):
     ) -> SafeString:
         template = self.get_template_name(template_pack)
         context.update({"alert": self, "content": self.content, "dismiss": self.dismiss})
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class UneditableField(Field):
@@ -1264,5 +1258,4 @@ class Modal(LayoutObject):
     ) -> SafeString:
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, {"modal": self, "fields": fields})  # type: ignore [return-value]
+        return render_to_string(template, {"modal": self, "fields": fields})

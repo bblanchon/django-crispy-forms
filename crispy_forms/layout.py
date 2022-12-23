@@ -245,8 +245,7 @@ class ButtonHolder(LayoutObject):
         template = self.get_template_name(template_pack)
         context.update({"buttonholder": self, "fields_output": html})
 
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class BaseInput(TemplateNameMixin):
@@ -324,8 +323,7 @@ class BaseInput(TemplateNameMixin):
         self.value = Template(str(self.value)).render(context)
         template = self.get_template_name(template_pack)
         context.update({"input": self})
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class Submit(BaseInput):
@@ -667,11 +665,10 @@ class Fieldset(LayoutObject):
             legend = SafeString("")
 
         template = self.get_template_name(template_pack)
-        # https://github.com/typeddjango/django-stubs/pull/1036
         return render_to_string(
             template,
             {"fieldset": self, "legend": legend, "fields": fields},
-        )  # type: ignore [return-value]
+        )
 
 
 class MultiField(LayoutObject):
@@ -766,8 +763,7 @@ class MultiField(LayoutObject):
         template = self.get_template_name(template_pack)
         context.update({"multifield": self, "fields_output": fields_output})
 
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, context.flatten())  # type: ignore [return-value]
+        return render_to_string(template, context.flatten())
 
 
 class Div(LayoutObject):
@@ -854,8 +850,7 @@ class Div(LayoutObject):
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
-        # https://github.com/typeddjango/django-stubs/pull/1036
-        return render_to_string(template, {"div": self, "fields": fields})  # type: ignore [return-value]
+        return render_to_string(template, {"div": self, "fields": fields})
 
 
 class Row(Div):
