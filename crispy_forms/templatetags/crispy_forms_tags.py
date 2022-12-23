@@ -11,7 +11,7 @@ from django.forms import BaseForm
 from django.forms.formsets import BaseFormSet
 from django.http.request import HttpRequest
 from django.template import Context
-from django.template.base import Parser, Token
+from django.template.base import Node, Parser, Token
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
@@ -23,8 +23,8 @@ from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 class _EngineTemplate(Protocol):
     def render(
         self,
-        context: Optional[Union[Context, Dict[str, Any]]] = ...,
-        request: Optional[HttpRequest] = ...,
+        context: Context | dict[Union[int, str, Node], Any] | None = ...,
+        request: HttpRequest | None = ...,
     ) -> SafeString:
         ...
 
