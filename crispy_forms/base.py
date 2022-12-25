@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import TracebackType
 from typing import Collection, Union
 
-from django.template import Context
+from django.template import Context, Node
 
 
 class KeepContext:
@@ -17,7 +17,7 @@ class KeepContext:
     touch context object themselves, that could introduce side effects.
     """
 
-    def __init__(self, context: Context, keys: Collection[str]) -> None:
+    def __init__(self, context: Context, keys: Collection[Union[int, str, Node]]) -> None:
         self.context = context
         self.keys = keys
 

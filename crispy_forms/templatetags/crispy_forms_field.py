@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 from django import forms, template
 from django.conf import settings
 from django.forms import BoundField, Field
-from django.template import Variable, loader
+from django.template import Context, Node, Variable, loader
 from django.template.base import Parser, Token
 from django.utils.safestring import SafeString
 
@@ -166,7 +166,7 @@ def crispy_addon(
     if field:
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
-        context = {
+        context: dict[Union[int, str, Node], Any] = {
             "field": field,
             "form_show_errors": True,
             "form_show_labels": form_show_labels,

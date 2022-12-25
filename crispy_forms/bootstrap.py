@@ -4,7 +4,7 @@ from random import randint
 from typing import Any, Dict, KeysView, List, Optional, Sequence, Union
 
 from django.forms import BaseForm
-from django.template import Context, Template
+from django.template import Context, Node, Template
 from django.template.loader import render_to_string
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
@@ -98,7 +98,7 @@ class PrependedAppendedText(Field):
         form: BaseForm,
         context: Context,
         template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[str, Any]] = None,
+        extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
         **kwargs: Any,
     ) -> SafeString:
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -382,7 +382,7 @@ class InlineCheckboxes(Field):
         form: BaseForm,
         context: Context,
         template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[str, str]] = None,
+        extra_context: Optional[Dict[Union[int, str, Node], str]] = None,
         **kwargs: Any,
     ) -> SafeString:
         extra_context = extra_context or {}
@@ -505,7 +505,7 @@ class FieldWithButtons(Div):
         form: BaseForm,
         context: Context,
         template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[str, Any]] = None,
+        extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
         **kwargs: Any,
     ) -> SafeString:
         # We first render the buttons

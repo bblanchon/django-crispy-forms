@@ -15,20 +15,20 @@ from .forms import GroupedChoiceForm, SampleForm, SampleForm5
 from .utils import parse_expected, parse_form
 
 
-def test_list_intersection():
+def test_list_intersection() -> None:
     assert list_intersection([1, 3], [2, 3]) == [3]
 
 
-def test_list_difference():
+def test_list_difference() -> None:
     assert list_difference([3, 1, 2, 3], [4, 1]) == [3, 2]
 
 
-def test_render_field_with_none_field():
+def test_render_field_with_none_field() -> None:
     rendered = render_field(field=None, form=None, context=None)
     assert rendered == ""
 
 
-def test_custom_bound_field():
+def test_custom_bound_field() -> None:
     from django.forms.boundfield import BoundField
 
     extra = "xyxyxyxyxyx"

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Sequence,
 from django.conf import settings
 from django.forms import BaseForm, BaseFormSet
 from django.forms.utils import flatatt as _flatatt
-from django.template import Context
+from django.template import Context, Node
 from django.template.backends.django import Template  # type: ignore [attr-defined]  # django-stubs/994
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
@@ -44,7 +44,7 @@ def render_field(  # noqa: C901
     layout_object: Optional[LayoutObject] = None,
     attrs: Optional[Union[Dict[str, str], Sequence[Dict[str, str]]]] = None,
     template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-    extra_context: Optional[Dict[str, Any]] = None,
+    extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
 ) -> SafeString:
     """
     Renders a django-crispy-forms field

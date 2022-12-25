@@ -29,7 +29,7 @@ from .forms import (
 )
 
 
-def test_field_with_custom_template():
+def test_field_with_custom_template() -> None:
     test_form = SampleForm()
     test_form.helper.layout = Layout(Field("email", template="custom_field_template.html"))
 
@@ -37,7 +37,7 @@ def test_field_with_custom_template():
     assert "<h1>Special custom field</h1>" in html
 
 
-def test_multiwidget_field():
+def test_multiwidget_field() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -64,7 +64,7 @@ def test_multiwidget_field():
     assert html.count('type="hidden"') == 2
 
 
-def test_field_type_hidden():
+def test_field_type_hidden() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -88,7 +88,7 @@ def test_field_type_hidden():
     assert html.count('class="timeinput') == 1
 
 
-def test_field_wrapper_class():
+def test_field_wrapper_class() -> None:
     form = SampleForm()
     form.helper.layout = Layout(Field("email", wrapper_class="testing"))
 
@@ -96,7 +96,7 @@ def test_field_wrapper_class():
     assert html.count('class="form-group testing"') == 1
 
 
-def test_html_with_carriage_returns():
+def test_html_with_carriage_returns() -> None:
     test_form = SampleForm()
     test_form.helper.layout = Layout(
         HTML(
@@ -113,7 +113,7 @@ def test_html_with_carriage_returns():
     assert html.count("\n") == 27
 
 
-def test_i18n():
+def test_i18n() -> None:
     activate("es")
     form = SampleForm()
     form.helper.layout = Layout(HTML(_("Enter a valid value.")))
@@ -123,7 +123,7 @@ def test_i18n():
     deactivate()
 
 
-def test_remove_labels():
+def test_remove_labels() -> None:
     form = SampleForm()
     # remove boolean field as label is still printed in boostrap
     del form.fields["is_company"]
@@ -137,7 +137,7 @@ def test_remove_labels():
 
 
 class TestBootstrapLayoutObjects:
-    def test_custom_django_widget(self):
+    def test_custom_django_widget(self) -> None:
 
         # Make sure an inherited RadioSelect gets rendered as it
         form = SampleFormCustomWidgets()
@@ -153,13 +153,13 @@ class TestBootstrapLayoutObjects:
         html = render_crispy_form(form)
         assert 'class="checkbox"' in html
 
-    def test_inline_radios(self):
+    def test_inline_radios(self) -> None:
         test_form = CheckboxesSampleForm()
         test_form.helper.layout = Layout(InlineRadios("inline_radios"))
         html = render_crispy_form(test_form)
         assert html.count('radio-inline"') == 2
 
-    def test_accordion_and_accordiongroup(self):
+    def test_accordion_and_accordiongroup(self) -> None:
         test_form = SampleForm()
         test_form.helper.layout = Layout(
             Accordion(
@@ -178,7 +178,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('name="password1"') == 1
         assert html.count('name="password2"') == 1
 
-    def test_accordion_active_false_not_rendered(self):
+    def test_accordion_active_false_not_rendered(self) -> None:
         test_form = SampleForm()
         test_form.helper.layout = Layout(
             Accordion(
@@ -221,7 +221,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('<div class="alert alert-block"') == 1
         assert html.count("Testing...") == 1
 
-    def test_tab_and_tab_holder(self):
+    def test_tab_and_tab_holder(self) -> None:
         test_form = SampleForm()
         test_form.helper.layout = Layout(
             TabHolder(
@@ -313,7 +313,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('type="hidden"') == 5
         assert html.count("<label") == 0
 
-    def test_multiplecheckboxes(self):
+    def test_multiplecheckboxes(self) -> None:
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 

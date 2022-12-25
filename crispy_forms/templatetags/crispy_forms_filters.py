@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Dict, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 
 from django import template
 from django.conf import settings
 from django.forms import BaseForm, BoundField
 from django.forms.formsets import BaseFormSet
-from django.template import TemplateDoesNotExist
+from django.template import Node, TemplateDoesNotExist
 from django.template.backends.django import Template  # type: ignore [attr-defined] # django-stubs/994
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
@@ -89,7 +89,7 @@ def as_crispy_errors(
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
-        c = {"formset": form}
+        c: dict[Union[int, str, Node], Any] = {"formset": form}
     else:
         template = get_template("%s/errors.html" % template_pack)
         c = {"form": form}
@@ -119,7 +119,7 @@ def as_crispy_field(
     if not isinstance(field, BoundField) and settings.DEBUG:  # type: ignore [unreachable]
         raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
 
-    attributes = {
+    attributes: dict[Union[int, str, Node], Any] = {
         "field": field,
         "form_show_errors": True,
         "form_show_labels": True,

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type, Union, cast
 
 from django.forms import BaseForm, BoundField
-from django.template import Context, Template
+from django.template import Context, Node, Template
 from django.template.loader import render_to_string
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
@@ -1056,7 +1056,7 @@ class Field(LayoutObject):
         form: BaseForm,
         context: Context,
         template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[str, str]] = None,
+        extra_context: Optional[Dict[Union[int, str, Node], str]] = None,
         **kwargs: Any,
     ) -> str:
         if extra_context is None:
