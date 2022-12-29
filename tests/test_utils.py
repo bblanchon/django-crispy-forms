@@ -62,7 +62,7 @@ def test_parse_expected_and_form():
     assert parse_form(form) == parse_expected("utils_test.html")
 
 
-def test_optgroup_filter_nested():
+def test_optgroup_filter_nested() -> None:
     form = GroupedChoiceForm({"checkbox_select_multiple": ["cd", "vhs"]})
     form.as_p()
     groups = optgroups(form["checkbox_select_multiple"])
@@ -139,7 +139,7 @@ def test_optgroup_filter_nested():
     assert index == 2
 
 
-def test_optgroup_filter():
+def test_optgroup_filter() -> None:
     form = SampleForm5({"checkbox_select_multiple": "1"})
     groups = optgroups(form["checkbox_select_multiple"])
     group = groups[0]
@@ -222,7 +222,7 @@ def test_optgroup_filter():
 
 
 @override_settings()
-def test_get_template_pack():
+def test_get_template_pack() -> None:
     del settings.CRISPY_TEMPLATE_PACK
     with pytest.raises(AttributeError):
         get_template_pack()
