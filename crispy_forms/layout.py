@@ -1051,14 +1051,14 @@ class Field(LayoutObject):
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update({k.replace("_", "-"): conditional_escape(v) for k, v in kwargs.items()})
 
-    def render(  # type: ignore [override]
+    def render(
         self,
         form: BaseForm,
         context: Context,
         template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         extra_context: dict[int | str | Node, str] | None = None,
         **kwargs: Any,
-    ) -> str:
+    ) -> SafeString:
         if extra_context is None:
             extra_context = {}
         if self.wrapper_class:

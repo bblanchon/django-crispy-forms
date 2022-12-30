@@ -392,7 +392,7 @@ class InlineCheckboxes(Field):
             context,
             template_pack=template_pack,
             extra_context=extra_context,
-        )  # type: ignore [return-value]
+        )
 
 
 class InlineRadios(InlineCheckboxes):
