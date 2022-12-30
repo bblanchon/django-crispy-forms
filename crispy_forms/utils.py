@@ -165,7 +165,7 @@ def flatatt(attrs: dict[str, str]) -> SafeString:
 def render_crispy_form(
     form: BaseForm | BaseFormSet[BaseForm],
     helper: FormHelper | None = None,
-    context: Context | None = None,
+    context: ContextDict | None = None,
 ) -> SafeString:
     """
     Renders a form and returns its HTML output.
