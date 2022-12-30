@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 import pytest
 
 from django import forms
@@ -25,8 +29,11 @@ from .forms import (
 from .test_settings import TEMPLATE_DIRS
 from .utils import parse_expected, parse_form
 
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
 
-def test_invalid_unicode_characters(settings) -> None:
+
+def test_invalid_unicode_characters(settings: SettingsWrapper) -> None:
     # Adds a BooleanField that uses non valid unicode characters "ñ"
     form_helper = FormHelper()
     form_helper.add_layout(Layout("españa"))
@@ -45,7 +52,7 @@ def test_invalid_unicode_characters(settings) -> None:
 
 def test_unicode_form_field() -> None:
     class UnicodeForm(forms.Form):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: Any, **kwargs: Any):
             super().__init__(*args, **kwargs)
             self.fields["contraseña"] = forms.CharField()
 
@@ -79,7 +86,7 @@ def test_meta_extra_fields_with_missing_fields() -> None:
     assert "email" not in html
 
 
-def test_layout_unresolved_field(settings) -> None:
+def test_layout_unresolved_field(settings: SettingsWrapper) -> None:
     form_helper = FormHelper()
     form_helper.add_layout(Layout("typo"))
 
@@ -95,7 +102,7 @@ def test_layout_unresolved_field(settings) -> None:
         template.render(c)
 
 
-def test_double_rendered_field(settings) -> None:
+def test_double_rendered_field(settings: SettingsWrapper) -> None:
     form_helper = FormHelper()
     form_helper.add_layout(Layout("is_company", "is_company"))
 
@@ -274,7 +281,7 @@ def test_i18n() -> None:
     assert html.count("i18n legend") == 1
 
 
-def test_default_layout():
+def test_default_layout() -> None:
     test_form = SampleForm()
     assert test_form.helper.layout.fields == [
         "is_company",
@@ -346,7 +353,7 @@ def test_keepcontext_context_manager() -> None:
     assert response.content.count(b"checkbox-inline") == 3
 
 
-def test_update_attributes_class():
+def test_update_attributes_class() -> None:
     form = SampleForm()
     form.helper.layout = Layout("email", Field("password1"), "password2")
     form.helper["password1"].update_attributes(css_class="hello")

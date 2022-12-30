@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
 
 from django.forms.boundfield import BoundField
@@ -8,6 +12,9 @@ from crispy_forms.exceptions import CrispyError
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 from .forms import SampleForm
+
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
 
 
 def test_crispy_field() -> None:
@@ -99,7 +106,7 @@ def test_as_crispy_errors_formset_with_non_form_errors() -> None:
     assert "<h3>" not in html
 
 
-def test_as_crispy_field_non_field(settings) -> None:
+def test_as_crispy_field_non_field(settings: SettingsWrapper) -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}

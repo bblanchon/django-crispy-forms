@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -17,6 +20,11 @@ from crispy_forms.utils import render_crispy_form
 
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia
 from .test_utils import parse_expected, parse_form
+
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
+
+    from crispy_forms.utils import ContextDict
 
 
 def test_inputs() -> None:
@@ -93,7 +101,7 @@ def test_form_with_helper_without_layout() -> None:
     assert 'id="this-form-rocks"' not in html
 
 
-def test_html5_required():
+def test_html5_required() -> None:
     form = SampleForm()
     form.helper.html5_required = True
     html = render_crispy_form(form)
@@ -193,7 +201,7 @@ def test_without_helper() -> None:
     assert "action" not in html
 
 
-def test_template_pack_override_compact(settings) -> None:
+def test_template_pack_override_compact(settings: SettingsWrapper) -> None:
     current_pack = settings.CRISPY_TEMPLATE_PACK
     if current_pack == "bootstrap4":
         override_pack = "bootstrap3"
@@ -217,7 +225,7 @@ def test_template_pack_override_compact(settings) -> None:
         assert "controls" not in html
 
 
-def test_template_pack_override_verbose(settings) -> None:
+def test_template_pack_override_verbose(settings: SettingsWrapper) -> None:
     current_pack = settings.CRISPY_TEMPLATE_PACK
     if current_pack == "bootstrap4":
         override_pack = "bootstrap3"
@@ -247,7 +255,7 @@ def test_template_pack_override_wrong() -> None:
         )
 
 
-def test_invalid_helper(settings) -> None:
+def test_invalid_helper(settings: SettingsWrapper) -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -362,11 +370,11 @@ def test_render_unmentioned_fields_order() -> None:
         < html.index('id="div_id_is_company"')
     )
 
-    test_form = SampleForm8()
-    test_form.helper.layout = Layout("email")
-    test_form.helper.render_unmentioned_fields = True
+    test_form8 = SampleForm8()
+    test_form8.helper.layout = Layout("email")
+    test_form8.helper.render_unmentioned_fields = True
 
-    html = render_crispy_form(test_form)
+    html = render_crispy_form(test_form8)
     assert html.count("<input") == 4
     assert (
         # From layout
@@ -437,7 +445,7 @@ def test_helper_std_field_template_no_layout() -> None:
         assert html.count('id="div_id_%s"' % field) == 1
 
 
-def test_error_text_inline():
+def test_error_text_inline() -> None:
     form = SampleForm({"email": "invalidemail"})
     layout = Layout(
         AppendedText("first_name", "wat"),
@@ -466,7 +474,7 @@ def test_error_text_inline():
     assert len(matches) == 3
 
 
-def test_form_show_labels():
+def test_form_show_labels() -> None:
     form = SampleForm()
     form.helper.layout = Layout(
         "password1",
@@ -481,7 +489,7 @@ def test_form_show_labels():
     assert html.count("<label") == 0
 
 
-def test_passthrough_context():
+def test_passthrough_context() -> None:
     """
     Test to ensure that context is passed through implicitly from outside of
     the crispy form into the crispy form templates.
@@ -489,7 +497,7 @@ def test_passthrough_context():
     form = SampleForm()
     form.helper.template = "custom_form_template_with_context.html"
 
-    c = {"prefix": "foo", "suffix": "bar"}
+    c: ContextDict = {"prefix": "foo", "suffix": "bar"}
 
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html

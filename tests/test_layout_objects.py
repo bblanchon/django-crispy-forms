@@ -204,7 +204,7 @@ class TestBootstrapLayoutObjects:
         html = render_crispy_form(test_form)
         assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 0
 
-    def test_alert(self):
+    def test_alert(self) -> None:
         test_form = SampleForm()
         test_form.helper.layout = Layout(Alert(content="Testing..."))
         html = render_crispy_form(test_form)
@@ -213,7 +213,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('<button type="button" class="close"') == 1
         assert html.count("Testing...") == 1
 
-    def test_alert_block(self):
+    def test_alert_block(self) -> None:
         test_form = SampleForm()
         test_form.helper.layout = Layout(Alert(content="Testing...", block=True))
         html = render_crispy_form(test_form)
@@ -249,7 +249,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('name="password1"') == 1
         assert html.count('name="password2"') == 1
 
-    def test_tab_helper_reuse(self):
+    def test_tab_helper_reuse(self) -> None:
         # this is a proper form, according to the docs.
         # note that the helper is a class property here,
         # shared between all instances
@@ -287,7 +287,7 @@ class TestBootstrapLayoutObjects:
         # tab 2 should be active
         assert html.count('<div id="two" \n    class="{} active'.format(tab_class)) == 1
 
-    def test_radio_attrs(self):
+    def test_radio_attrs(self) -> None:
         form = CheckboxesSampleForm()
         form.fields["inline_radios"].widget.attrs = {"class": "first"}
         form.fields["checkboxes"].widget.attrs = {"class": "second"}
@@ -295,7 +295,7 @@ class TestBootstrapLayoutObjects:
         assert 'class="first"' in html
         assert 'class="second"' in html
 
-    def test_hidden_fields(self):
+    def test_hidden_fields(self) -> None:
         form = SampleForm()
         # All fields hidden
         for field in form.fields:
@@ -325,7 +325,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('inline="True"') == 4
         assert html.count('checkbox-inline"') == 3
 
-    def test_multiple_checkboxes_unique_ids(self):
+    def test_multiple_checkboxes_unique_ids(self) -> None:
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 
@@ -344,7 +344,7 @@ class TestBootstrapLayoutObjects:
             expected_str = f'id="id_{id_suffix}"'
             assert html.count(expected_str) == 1
 
-    def test_non_ascii_chars_in_container_name(self):
+    def test_non_ascii_chars_in_container_name(self) -> None:
         """
         Test if non-ASCII characters are saved as css_id property.
         """

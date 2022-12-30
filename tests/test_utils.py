@@ -35,11 +35,11 @@ def test_custom_bound_field() -> None:
 
     class CustomBoundField(BoundField):
         @property
-        def auto_id(self):
+        def auto_id(self) -> str:
             return extra
 
     class MyCharField(forms.CharField):
-        def get_bound_field(self, form, field_name):
+        def get_bound_field(self, form: forms.BaseForm, field_name: str) -> CustomBoundField:
             return CustomBoundField(form, self, field_name)
 
     class MyForm(forms.Form):
@@ -56,7 +56,7 @@ def test_custom_bound_field() -> None:
     assert extra in rendered
 
 
-def test_parse_expected_and_form():
+def test_parse_expected_and_form() -> None:
     form = SampleForm()
     form.helper.layout = Layout("is_company")
     assert parse_form(form) == parse_expected("utils_test.html")

@@ -287,7 +287,7 @@ def test_layout_get_field_names() -> None:
     ]
 
 
-def test_filter_by_widget(advanced_layout):
+def test_filter_by_widget(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     assert form.helper.filter_by_widget(forms.PasswordInput).slice == [
@@ -296,7 +296,7 @@ def test_filter_by_widget(advanced_layout):
     ]
 
 
-def test_exclude_by_widget(advanced_layout):
+def test_exclude_by_widget(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     assert form.helper.exclude_by_widget(forms.PasswordInput).slice == [
@@ -306,7 +306,7 @@ def test_exclude_by_widget(advanced_layout):
     ]
 
 
-def test_exclude_by_widget_and_wrap(advanced_layout):
+def test_exclude_by_widget_and_wrap(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class="hero")
@@ -327,7 +327,7 @@ def test_all_without_layout() -> None:
         form.helper.all().wrap(Div)
 
 
-def test_filter_by_widget_without_form(advanced_layout):
+def test_filter_by_widget_without_form(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper = FormHelper()  # reset helper to remove default layout
     form.helper.layout = advanced_layout
