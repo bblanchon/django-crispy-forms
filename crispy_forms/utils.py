@@ -9,7 +9,6 @@ from django.conf import settings
 from django.forms import BaseForm, BaseFormSet
 from django.forms.utils import flatatt as _flatatt
 from django.template import Context, Node
-from django.template.backends.django import Template  # type: ignore [attr-defined]  # django-stubs/994
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
@@ -17,6 +16,8 @@ from django.utils.safestring import SafeString
 from .base import KeepContext
 
 if TYPE_CHECKING:
+    from django.template.backends.base import _EngineTemplate
+
     from crispy_forms.helper import FormHelper
     from crispy_forms.layout import HTML, BaseInput, LayoutObject
 
@@ -31,7 +32,7 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 # By caching we avoid loading the template every time render_field
 # is called without a template
 @lru_cache()
-def default_field_template(template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK) -> Template:
+def default_field_template(template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/field.html" % template_pack)
 
 

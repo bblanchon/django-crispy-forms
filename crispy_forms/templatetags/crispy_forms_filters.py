@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, Union, cast
 
 from django import template
 from django.conf import settings
 from django.forms import BaseForm, BoundField
 from django.forms.formsets import BaseFormSet
 from django.template import Node, TemplateDoesNotExist
-from django.template.backends.django import Template  # type: ignore [attr-defined] # django-stubs/994
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString, mark_safe
@@ -16,14 +15,19 @@ from django.utils.safestring import SafeString, mark_safe
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from django.template.backends.base import _EngineTemplate
+
 
 @lru_cache()
-def uni_formset_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> Template:
+def uni_formset_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_formset.html" % template_pack)
 
 
 @lru_cache()
-def uni_form_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> Template:
+def uni_form_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_form.html" % template_pack)
 
 
@@ -68,8 +72,8 @@ def as_crispy_form(
     else:
         template = uni_form_template(template_pack)
         c["form"] = form
-
-    return template.render(c)
+    ctx = cast(Mapping[Union[int, str, Node], Any], c)
+    return template.render(ctx)
 
 
 @register.filter(name="as_crispy_errors")

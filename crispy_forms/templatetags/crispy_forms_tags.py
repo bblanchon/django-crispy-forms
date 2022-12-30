@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Any, Dict, Optional, Union
-
-from typing_extensions import Protocol
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from django import template
 from django.conf import settings
 from django.forms import BaseForm
 from django.forms.formsets import BaseFormSet
-from django.http.request import HttpRequest
 from django.template import Context
 from django.template.base import Node, Parser, Token
 from django.template.loader import get_template
@@ -19,14 +16,8 @@ from django.utils.safestring import SafeString
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
-
-class _EngineTemplate(Protocol):
-    def render(
-        self,
-        context: Context | dict[Union[int, str, Node], Any] | None = ...,
-        request: HttpRequest | None = ...,
-    ) -> SafeString:
-        ...
+if TYPE_CHECKING:
+    from django.template.backends.base import _EngineTemplate
 
 
 register = template.Library()
