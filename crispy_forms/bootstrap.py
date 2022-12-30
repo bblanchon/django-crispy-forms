@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from random import randint
-from typing import Any, KeysView, List, Sequence
+from typing import Any, KeysView, Sequence
 
 from django.forms import BaseForm
 from django.template import Context, Node, Template
@@ -1061,7 +1061,7 @@ class Alert(Div):
         template: str | None = None,
         **kwargs: str,
     ) -> None:
-        fields: List[str] = []
+        fields: list[str] = []
         if block:
             self.css_class += " alert-block"
         super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)

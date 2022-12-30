@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Iterable, List, Sequence
+from typing import TYPE_CHECKING, Any, Iterable, Sequence
 
 from django.conf import settings
 from django.forms import BaseForm, BaseFormSet
@@ -183,7 +183,7 @@ def render_crispy_form(
     return node.render(node_context)
 
 
-def list_intersection(list1: List[Any], list2: List[Any]) -> List[Any]:
+def list_intersection(list1: list[Any], list2: list[Any]) -> list[Any]:
     """
     Take the not-in-place intersection of two lists, similar to sets but preserving order.
     Does not check unicity of list1.
@@ -191,7 +191,7 @@ def list_intersection(list1: List[Any], list2: List[Any]) -> List[Any]:
     return [item for item in list1 if item in list2]
 
 
-def list_difference(left: Iterable[str], right: Iterable[str]) -> List[str]:
+def list_difference(left: Iterable[str], right: Iterable[str]) -> list[str]:
     """
     Take the not-in-place difference of two lists (left - right), similar to sets but preserving order.
     """

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, List, Type, cast
+from typing import Any, Type, cast
 
 from django.forms import BaseForm, Widget
 from django.template import Context
@@ -228,7 +228,7 @@ class FormHelper(DynamicLayoutHandler):
 
     def __init__(self, form: BaseForm | None = None) -> None:
         self.attrs: dict[str, str] = {}
-        self.inputs: List[BaseInput] = []
+        self.inputs: list[BaseInput] = []
 
         if form is not None:
             self.form = form

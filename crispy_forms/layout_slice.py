@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, List, Type, cast
+from typing import Any, Callable, Type, cast
 
 from crispy_forms.bootstrap import Container
 from crispy_forms.exceptions import DynamicError
@@ -11,17 +11,17 @@ class LayoutSlice:
     # List of layout objects that need args passed first before fields
     args_first = (Fieldset, MultiField, Container)
 
-    def __init__(self, layout: Layout, key: slice | int | List[Pointer]) -> None:
+    def __init__(self, layout: Layout, key: slice | int | list[Pointer]) -> None:
         self.layout = layout
         if isinstance(key, int):
-            self.slice: slice | List[Pointer] = slice(key, key + 1, 1)
+            self.slice: slice | list[Pointer] = slice(key, key + 1, 1)
         else:
             self.slice = key
 
     def wrapped_object(
         self,
         LayoutClass: Type[LayoutObject],
-        fields: List[str | LayoutObject] | str | LayoutObject,
+        fields: list[str | LayoutObject] | str | LayoutObject,
         *args: str,
         **kwargs: str,
     ) -> LayoutObject:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, List, Type, cast
+from typing import Any, Type, cast, list
 
 from django.forms import BaseForm, BoundField
 from django.template import Context, Node, Template
@@ -16,7 +16,7 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
 
 @dataclass
 class Pointer:
-    positions: List[int]
+    positions: list[int]
     name: str
 
 
@@ -33,8 +33,8 @@ class TemplateNameMixin:
 
 
 class LayoutObject(TemplateNameMixin):
-    fields: List[str | LayoutObject]
-    bound_fields: List[BoundField]
+    fields: list[str | LayoutObject]
+    bound_fields: list[BoundField]
     attrs: dict[str, str]
 
     def __getitem__(self, slice: int) -> str | LayoutObject:
@@ -60,7 +60,7 @@ class LayoutObject(TemplateNameMixin):
         else:
             return object.__getattribute__(self, name)
 
-    def get_field_names(self, index: Any = None) -> List[Pointer]:
+    def get_field_names(self, index: Any = None) -> list[Pointer]:
         """
         Returns a list of Pointers. First parameter is the location of the
         field, second one the name of the field. Example::
@@ -75,10 +75,10 @@ class LayoutObject(TemplateNameMixin):
     def get_layout_objects(
         self,
         *LayoutClasses: Type[str] | Type[LayoutObject],
-        index: List[int] | int | None = None,
+        index: list[int] | int | None = None,
         max_level: int = 0,
         greedy: bool = False,
-    ) -> List[Pointer]:
+    ) -> list[Pointer]:
         """
         Returns a list of Pointers pointing to layout objects of any type matching
         `LayoutClasses`::
