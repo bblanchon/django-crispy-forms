@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from django import template
 from django.conf import settings
@@ -73,7 +73,7 @@ class BasicNode(template.Node):
     that templates can easily handle.
     """
 
-    def __init__(self, form: str, helper: Union[str, None], template_pack: Optional[str] = None) -> None:
+    def __init__(self, form: str, helper: str | None, template_pack: str | None = None) -> None:
         self.form = form
         self.helper = helper
         self.template_pack = template_pack or get_template_pack()
@@ -145,9 +145,7 @@ class BasicNode(template.Node):
 
         return final_context
 
-    def get_response_dict(
-        self, helper: FormHelper, context: Context, is_formset: bool
-    ) -> Dict[Union[int, str, Node], Any]:
+    def get_response_dict(self, helper: FormHelper, context: Context, is_formset: bool) -> dict[int | str | Node, Any]:
         """
         Returns a dictionary with all the parameters necessary to render the form/formset in a template.
 
@@ -163,7 +161,7 @@ class BasicNode(template.Node):
             form_type = "formset"
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
-        response_dict: dict[Union[int, str, Node], Any] = {
+        response_dict: dict[int | str | Node, Any] = {
             "%s_action" % form_type: attrs["attrs"].get("action", ""),
             "%s_attrs" % form_type: attrs.get("attrs", ""),
             "%s_class" % form_type: attrs["attrs"].get("class", ""),
@@ -199,12 +197,12 @@ class BasicNode(template.Node):
 
 
 @lru_cache()
-def whole_uni_formset_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
+def whole_uni_formset_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/whole_uni_formset.html" % template_pack)
 
 
 @lru_cache()
-def whole_uni_form_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
+def whole_uni_form_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/whole_uni_form.html" % template_pack)
 
 

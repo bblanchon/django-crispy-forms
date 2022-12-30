@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, Optional, Tuple, Union
+from typing import Any, Iterable, Tuple
 
 from django import forms, template
 from django.conf import settings
@@ -57,7 +57,7 @@ def is_multivalue(field: BoundField) -> bool:
 
 
 @register.filter
-def classes(field: Field) -> Optional[str]:
+def classes(field: Field) -> str | None:
     """
     Returns CSS classes of a field
     """
@@ -79,7 +79,7 @@ def pairwise(iterable: Iterable[str]) -> zip[Tuple[str, str]]:
 
 
 class CrispyFieldNode(template.Node):
-    def __init__(self, field: str, attrs: Dict[str, str]):
+    def __init__(self, field: str, attrs: dict[str, str]):
         self.field = field
         self.attrs = attrs
 
@@ -152,7 +152,7 @@ def crispy_field(parser: Parser, token: Token) -> CrispyFieldNode:
 @register.simple_tag()
 def crispy_addon(
     field: BoundField, append: str = "", prepend: str = "", form_show_labels: bool = True
-) -> Optional[SafeString]:
+) -> SafeString | None:
     """
     Renders a form field using bootstrap's prepended or appended text::
 
@@ -166,7 +166,7 @@ def crispy_addon(
     if field:
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
-        context: dict[Union[int, str, Node], Any] = {
+        context: dict[int | str | Node, Any] = {
             "field": field,
             "form_show_errors": True,
             "form_show_labels": form_show_labels,

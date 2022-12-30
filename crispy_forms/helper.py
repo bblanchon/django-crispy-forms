@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, List, Type, cast
 
 from django.forms import BaseForm, Widget
 from django.template import Context
@@ -16,8 +16,8 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_f
 
 
 class DynamicLayoutHandler:
-    layout: Optional[Layout]
-    form: Optional[BaseForm]
+    layout: Layout | None
+    form: BaseForm | None
 
     def _check_layout(self) -> None:
         if self.layout is None:
@@ -79,7 +79,7 @@ class DynamicLayoutHandler:
 
         return LayoutSlice(layout, filtered_fields)
 
-    def __getitem__(self, key: Union[str, int]) -> LayoutSlice:
+    def __getitem__(self, key: str | int) -> LayoutSlice:
         """
         Return a LayoutSlice that makes changes affect the current instance of the layout
         and not a copy.
@@ -107,7 +107,7 @@ class DynamicLayoutHandler:
         layout = cast(Layout, self.layout)
         return LayoutSlice(layout, key)
 
-    def __setitem__(self, key: int, value: Union[str, LayoutObject]) -> None:
+    def __setitem__(self, key: int, value: str | LayoutObject) -> None:
         self._check_layout()
         layout = cast(Layout, self.layout)
         layout[key] = value
@@ -218,16 +218,16 @@ class FormHelper(DynamicLayoutHandler):
     _help_text_inline = False
     _error_text_inline = True
     form_show_labels = True
-    template: Optional[str] = None
-    field_template: Optional[str] = None
+    template: str | None = None
+    field_template: str | None = None
     disable_csrf = False
     use_custom_control = True
     label_class = ""
     field_class = ""
     include_media = True
 
-    def __init__(self, form: Optional[BaseForm] = None) -> None:
-        self.attrs: Dict[str, str] = {}
+    def __init__(self, form: BaseForm | None = None) -> None:
+        self.attrs: dict[str, str] = {}
         self.inputs: List[BaseInput] = []
 
         if form is not None:
@@ -287,7 +287,7 @@ class FormHelper(DynamicLayoutHandler):
         self.layout = layout
 
     def render_layout(
-        self, form: BaseForm, context: Context, template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK
+        self, form: BaseForm, context: Context, template_pack: SimpleLazyObject | str = TEMPLATE_PACK
     ) -> SafeString:
         """
         Returns safe html of the rendering of the layout
@@ -314,9 +314,7 @@ class FormHelper(DynamicLayoutHandler):
 
         return mark_safe(html)
 
-    def get_attributes(  # noqa: C901
-        self, template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK
-    ) -> Dict[str, Any]:
+    def get_attributes(self, template_pack: SimpleLazyObject | str = TEMPLATE_PACK) -> dict[str, Any]:  # noqa: C901
         """
         Used by crispy_forms_tags to get helper attributes
         """

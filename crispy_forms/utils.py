@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any, Iterable, List, Sequence
 
 from django.conf import settings
 from django.forms import BaseForm, BaseFormSet
@@ -32,20 +32,20 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 # By caching we avoid loading the template every time render_field
 # is called without a template
 @lru_cache()
-def default_field_template(template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK) -> _EngineTemplate:
+def default_field_template(template_pack: SimpleLazyObject | str = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/field.html" % template_pack)
 
 
 def render_field(  # noqa: C901
-    field: Union[LayoutObject, HTML, BaseInput, str, None],
+    field: LayoutObject | HTML | BaseInput | str | None,
     form: BaseForm,
     context: Context,
-    template: Optional[str] = None,
-    labelclass: Optional[str] = None,
-    layout_object: Optional[LayoutObject] = None,
-    attrs: Optional[Union[Dict[str, str], Sequence[Dict[str, str]]]] = None,
-    template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-    extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
+    template: str | None = None,
+    labelclass: str | None = None,
+    layout_object: LayoutObject | None = None,
+    attrs: dict[str, str] | Sequence[dict[str, str]] | None = None,
+    template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
+    extra_context: dict[int | str | Node, Any] | None = None,
 ) -> SafeString:
     """
     Renders a django-crispy-forms field
@@ -83,7 +83,7 @@ def render_field(  # noqa: C901
                 # We use attrs as a dictionary later, so here we make a copy
                 if isinstance(attrs, dict):
                     # TODO why type required here?
-                    list_attrs: Sequence[Dict[str, str]] = [attrs] * len(widgets)
+                    list_attrs: Sequence[dict[str, str]] = [attrs] * len(widgets)
                 else:
                     list_attrs = attrs
 
@@ -150,7 +150,7 @@ def render_field(  # noqa: C901
         return html
 
 
-def flatatt(attrs: Dict[str, str]) -> SafeString:
+def flatatt(attrs: dict[str, str]) -> SafeString:
     """
     Convert a dictionary of attributes to a single string.
 
@@ -161,9 +161,9 @@ def flatatt(attrs: Dict[str, str]) -> SafeString:
 
 
 def render_crispy_form(
-    form: Union[BaseForm, BaseFormSet[BaseForm]],
-    helper: Optional[FormHelper] = None,
-    context: Optional[Context] = None,
+    form: BaseForm | BaseFormSet[BaseForm],
+    helper: FormHelper | None = None,
+    context: Context | None = None,
 ) -> SafeString:
     """
     Renders a form and returns its HTML output.

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, List, Type, cast
 
 from django.forms import BaseForm, BoundField
 from django.template import Context, Node, Template
@@ -23,7 +23,7 @@ class Pointer:
 class TemplateNameMixin:
     template: str
 
-    def get_template_name(self, template_pack: Union[SimpleLazyObject, str]) -> str:
+    def get_template_name(self, template_pack: SimpleLazyObject | str) -> str:
         if "%s" in self.template:
             template = self.template % template_pack
         else:
@@ -33,14 +33,14 @@ class TemplateNameMixin:
 
 
 class LayoutObject(TemplateNameMixin):
-    fields: List[Union[str, LayoutObject]]
+    fields: List[str | LayoutObject]
     bound_fields: List[BoundField]
-    attrs: Dict[str, str]
+    attrs: dict[str, str]
 
-    def __getitem__(self, slice: int) -> Union[str, LayoutObject]:
+    def __getitem__(self, slice: int) -> str | LayoutObject:
         return self.fields[slice]
 
-    def __setitem__(self, slice: int, value: Union[str, LayoutObject]) -> None:
+    def __setitem__(self, slice: int, value: str | LayoutObject) -> None:
         self.fields[slice] = value
 
     def __delitem__(self, slice: int) -> None:
@@ -60,7 +60,7 @@ class LayoutObject(TemplateNameMixin):
         else:
             return object.__getattribute__(self, name)
 
-    def get_field_names(self, index: Optional[Any] = None) -> List[Pointer]:
+    def get_field_names(self, index: Any = None) -> List[Pointer]:
         """
         Returns a list of Pointers. First parameter is the location of the
         field, second one the name of the field. Example::
@@ -74,8 +74,8 @@ class LayoutObject(TemplateNameMixin):
 
     def get_layout_objects(
         self,
-        *LayoutClasses: Union[Type[str], Type[LayoutObject]],
-        index: Optional[Union[List[int], int]] = None,
+        *LayoutClasses: Type[str] | Type[LayoutObject],
+        index: List[int] | int | None = None,
         max_level: int = 0,
         greedy: bool = False,
     ) -> List[Pointer]:
@@ -122,7 +122,7 @@ class LayoutObject(TemplateNameMixin):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         return SafeString(
@@ -133,7 +133,7 @@ class LayoutObject(TemplateNameMixin):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         raise NotImplementedError("Subclass must define a render method.")
@@ -168,14 +168,14 @@ class Layout(LayoutObject):
         )
     """
 
-    def __init__(self, *fields: Union[LayoutObject, str]) -> None:
+    def __init__(self, *fields: LayoutObject | str) -> None:
         self.fields = list(fields)
 
     def render(
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         return self.get_rendered_fields(form, context, template_pack, **kwargs)
@@ -223,10 +223,10 @@ class ButtonHolder(LayoutObject):
 
     def __init__(
         self,
-        *fields: Union[HTML, BaseInput],
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        *fields: HTML | BaseInput,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
     ):
         self.fields = list(fields)  # type: ignore [arg-type]
         self.css_id = css_id
@@ -237,7 +237,7 @@ class ButtonHolder(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         html = self.get_rendered_fields(form, context, template_pack, **kwargs)
@@ -289,9 +289,9 @@ class BaseInput(TemplateNameMixin):
         name: str,
         value: str,
         *,
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.name = name
@@ -301,7 +301,7 @@ class BaseInput(TemplateNameMixin):
         else:
             slug = slugify(self.name)
             self.id = f"{self.input_type}-id-{slug}"
-        self.attrs: Dict[str, str] = {}
+        self.attrs: dict[str, str] = {}
 
         if css_class:
             self.field_classes += f" {css_class}"
@@ -313,7 +313,7 @@ class BaseInput(TemplateNameMixin):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         """
@@ -637,9 +637,9 @@ class Fieldset(LayoutObject):
         self,
         legend: str,
         *fields: str,
-        css_class: Optional[str] = None,
-        css_id: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        css_id: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
 
@@ -654,7 +654,7 @@ class Fieldset(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
@@ -718,12 +718,12 @@ class MultiField(LayoutObject):
         self,
         label: str,
         *fields: str,
-        label_class: Optional[str] = None,
-        help_text: Optional[str] = None,
-        css_class: Optional[str] = None,
-        css_id: Optional[str] = None,
-        template: Optional[str] = None,
-        field_template: Optional[str] = None,
+        label_class: str | None = None,
+        help_text: str | None = None,
+        css_class: str | None = None,
+        css_id: str | None = None,
+        template: str | None = None,
+        field_template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.fields = list(fields)
@@ -740,7 +740,7 @@ class MultiField(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         # If a field within MultiField contains errors
@@ -819,14 +819,14 @@ class Div(LayoutObject):
     """
 
     template = "%s/layout/div.html"
-    css_class: Union[None, str] = None
+    css_class: None | str = None
 
     def __init__(
         self,
-        *fields: Union[LayoutObject, str],
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        *fields: LayoutObject | str,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.fields = list(fields)
@@ -844,7 +844,7 @@ class Div(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
@@ -977,7 +977,7 @@ class HTML:
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         return Template(str(self.html)).render(context)
@@ -1025,14 +1025,14 @@ class Field(LayoutObject):
     """
 
     template = "%s/field.html"
-    attrs: Dict[str, str] = {}
+    attrs: dict[str, str] = {}
 
     def __init__(
         self,
         *fields: str,
-        css_class: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ):
         self.fields = list(fields)
@@ -1055,8 +1055,8 @@ class Field(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[Union[int, str, Node], str]] = None,
+        template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
+        extra_context: dict[int | str | Node, str] | None = None,
         **kwargs: Any,
     ) -> str:
         if extra_context is None:
@@ -1120,9 +1120,9 @@ class MultiWidgetField(Field):
     def __init__(
         self,
         *fields: str,
-        attrs: Optional[Dict[str, str]] = None,
-        template: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
+        attrs: dict[str, str] | None = None,
+        template: str | None = None,
+        wrapper_class: str | None = None,
     ) -> None:
         self.fields = list(fields)
         self.attrs = attrs or {}

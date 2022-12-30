@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from random import randint
-from typing import Any, Dict, KeysView, List, Optional, Sequence, Union
+from typing import Any, KeysView, List, Sequence
 
 from django.forms import BaseForm
 from django.template import Context, Node, Template
@@ -68,14 +68,14 @@ class PrependedAppendedText(Field):
     def __init__(
         self,
         field: str,
-        prepended_text: Optional[str] = None,
-        appended_text: Optional[str] = None,
-        input_size: Optional[str] = None,
+        prepended_text: str | None = None,
+        appended_text: str | None = None,
+        input_size: str | None = None,
         *,
         active: bool = False,
-        css_class: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.field = field
@@ -97,8 +97,8 @@ class PrependedAppendedText(Field):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[int | str | Node, Any] | None = None,
         **kwargs: Any,
     ) -> SafeString:
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -176,11 +176,11 @@ class AppendedText(PrependedAppendedText):
         field: str,
         text: str,
         *,
-        input_size: Optional[str] = None,
+        input_size: str | None = None,
         active: bool = False,
-        css_class: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ):
         self.text = text
@@ -248,11 +248,11 @@ class PrependedText(PrependedAppendedText):
         field: str,
         text: str,
         *,
-        input_size: Optional[str] = None,
+        input_size: str | None = None,
         active: bool = False,
-        css_class: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ):
         self.text = text
@@ -310,10 +310,10 @@ class FormActions(LayoutObject):
 
     def __init__(
         self,
-        *fields: Union[HTML, BaseInput],
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        *fields: HTML | BaseInput,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.fields = list(fields)  # type: ignore [arg-type]
@@ -326,7 +326,7 @@ class FormActions(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         html = self.get_rendered_fields(form, context, template_pack, **kwargs)
@@ -381,8 +381,8 @@ class InlineCheckboxes(Field):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[Union[int, str, Node], str]] = None,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[int | str | Node, str] | None = None,
         **kwargs: Any,
     ) -> SafeString:
         extra_context = extra_context or {}
@@ -490,11 +490,11 @@ class FieldWithButtons(Div):
 
     def __init__(
         self,
-        *fields: Union[str, LayoutObject],
-        input_size: Optional[str] = None,
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        *fields: str | LayoutObject,
+        input_size: str | None = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.input_size = input_size
@@ -504,8 +504,8 @@ class FieldWithButtons(Div):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
-        extra_context: Optional[Dict[Union[int, str, Node], Any]] = None,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[int | str | Node, Any] | None = None,
         **kwargs: Any,
     ) -> SafeString:
         # We first render the buttons
@@ -592,9 +592,9 @@ class StrictButton(TemplateNameMixin):
     def __init__(
         self,
         content: str,
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.content = content
@@ -616,7 +616,7 @@ class StrictButton(TemplateNameMixin):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         self.content = Template(str(self.content)).render(context)
@@ -665,11 +665,11 @@ class Container(Div):
     def __init__(
         self,
         name: str,
-        *fields: Union[str, LayoutObject],
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
-        active: Optional[bool] = None,
+        *fields: str | LayoutObject,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        active: bool | None = None,
         **kwargs: str,
     ):
         super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
@@ -689,7 +689,7 @@ class Container(Div):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         if self.active:
@@ -732,7 +732,7 @@ class ContainerHolder(Div):
 
     fields: Sequence[Container]  # type: ignore [assignment]
 
-    def first_container_with_errors(self, errors: KeysView[str]) -> Optional[Container]:
+    def first_container_with_errors(self, errors: KeysView[str]) -> Container | None:
         """
         Returns the first container with errors, otherwise returns None.
         """
@@ -803,7 +803,7 @@ class Tab(Container):
     css_class = "tab-pane"
     link_template = "%s/layout/tab-link.html"
 
-    def render_link(self, template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK, **kwargs: Any) -> SafeString:
+    def render_link(self, template_pack: str | SimpleLazyObject = TEMPLATE_PACK, **kwargs: Any) -> SafeString:
         """
         Render the link for the tab-pane. It must be called after render so css_class is updated
         with active if needed.
@@ -858,7 +858,7 @@ class TabHolder(ContainerHolder):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         for tab in self.fields:
@@ -967,9 +967,9 @@ class Accordion(ContainerHolder):
     def __init__(
         self,
         *accordion_groups: AccordionGroup,
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         super().__init__(*accordion_groups, css_id=css_id, css_class=css_class, template=template, **kwargs)
@@ -986,7 +986,7 @@ class Accordion(ContainerHolder):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         content = SafeString("")
@@ -1056,9 +1056,9 @@ class Alert(Div):
         content: str,
         dismiss: bool = True,
         block: bool = False,
-        css_id: Optional[str] = None,
-        css_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         fields: List[str] = []
@@ -1072,7 +1072,7 @@ class Alert(Div):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         template = self.get_template_name(template_pack)
@@ -1124,9 +1124,9 @@ class UneditableField(Field):
     def __init__(
         self,
         field: str,
-        css_class: Optional[str] = None,
-        wrapper_class: Optional[str] = None,
-        template: Optional[str] = None,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
         **kwargs: str,
     ) -> None:
         self.attrs = {"class": "uneditable-input"}
@@ -1228,12 +1228,12 @@ class Modal(LayoutObject):
     def __init__(
         self,
         *fields: str,
-        template: Optional[str] = None,
+        template: str | None = None,
         css_id: str = "modal_id",
         title: str = "Modal Title",
         title_id: str = "modal_title_id",
-        css_class: Optional[str] = None,
-        title_class: Optional[str] = None,
+        css_class: str | None = None,
+        title_class: str | None = None,
         **kwargs: str,
     ) -> None:
 
@@ -1253,7 +1253,7 @@ class Modal(LayoutObject):
         self,
         form: BaseForm,
         context: Context,
-        template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
         **kwargs: Any,
     ) -> SafeString:
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)

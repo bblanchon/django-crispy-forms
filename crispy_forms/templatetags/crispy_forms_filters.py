@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, Any, Tuple, cast
 
 from django import template
 from django.conf import settings
@@ -22,12 +22,12 @@ if TYPE_CHECKING:
 
 
 @lru_cache()
-def uni_formset_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
+def uni_formset_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_formset.html" % template_pack)
 
 
 @lru_cache()
-def uni_form_template(template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK) -> _EngineTemplate:
+def uni_form_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_form.html" % template_pack)
 
 
@@ -36,8 +36,8 @@ register = template.Library()
 
 @register.filter(name="crispy")
 def as_crispy_form(
-    form: Union[BaseFormSet[BaseForm], BaseForm],
-    template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
+    form: BaseForm | BaseFormSet[BaseForm],
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
     label_class: str = "",
     field_class: str = "",
 ) -> SafeString:
@@ -72,15 +72,15 @@ def as_crispy_form(
     else:
         template = uni_form_template(template_pack)
         c["form"] = form
-    ctx = cast(Mapping[Union[int, str, Node], Any], c)
+    ctx = cast(Mapping[int | str | Node, Any], c)
     return template.render(ctx)
 
 
 @register.filter(name="as_crispy_errors")
 def as_crispy_errors(
-    form: Union[BaseFormSet[BaseForm], BaseForm],
-    template_pack: Union[str, SimpleLazyObject] = TEMPLATE_PACK,
-) -> Union[SafeString, TemplateDoesNotExist]:
+    form: BaseForm | BaseFormSet[BaseForm],
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+) -> SafeString | TemplateDoesNotExist:
     """
     Renders only form errors the same way as django-crispy-forms::
 
@@ -93,7 +93,7 @@ def as_crispy_errors(
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
-        c: dict[Union[int, str, Node], Any] = {"formset": form}
+        c: dict[int | str | Node, Any] = {"formset": form}
     else:
         template = get_template("%s/errors.html" % template_pack)
         c = {"form": form}
@@ -104,10 +104,10 @@ def as_crispy_errors(
 @register.filter(name="as_crispy_field")
 def as_crispy_field(
     field: BoundField,
-    template_pack: Union[SimpleLazyObject, str] = TEMPLATE_PACK,
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
     label_class: str = "",
     field_class: str = "",
-) -> Union[SafeString, TemplateDoesNotExist]:
+) -> SafeString | TemplateDoesNotExist:
     """
     Renders a form field like a django-crispy-forms field::
 
@@ -123,7 +123,7 @@ def as_crispy_field(
     if not isinstance(field, BoundField) and settings.DEBUG:  # type: ignore [unreachable]
         raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
 
-    attributes: dict[Union[int, str, Node], Any] = {
+    attributes: dict[int | str | Node, Any] = {
         "field": field,
         "form_show_errors": True,
         "form_show_labels": True,
@@ -149,7 +149,7 @@ def flatatt_filter(attrs: dict[str, str]) -> SafeString:
 
 
 @register.filter
-def optgroups(field: BoundField) -> Tuple[Optional[str], Dict[str, Union[str, bool, int, Dict[str, str]]], int]:
+def optgroups(field: BoundField) -> Tuple[str | None, dict[str, str | bool | int | dict[str, str]], int]:
     """
     A template filter to help rendering of fields with optgroups.
 
