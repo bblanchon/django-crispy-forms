@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 from random import randint
-from typing import Any, KeysView, Sequence
+from typing import TYPE_CHECKING, Any, KeysView, Sequence
 
-from django.forms import BaseForm
 from django.template import Context, Node, Template
 from django.template.loader import render_to_string
-from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from .layout import HTML, BaseInput, Div, Field, LayoutObject, TemplateNameMixin
 from .utils import TEMPLATE_PACK, flatatt, render_field
+
+if TYPE_CHECKING:
+    from django.forms import BaseForm
+    from django.utils.functional import SimpleLazyObject
 
 
 class PrependedAppendedText(Field):

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any, Tuple, cast
 
@@ -7,18 +8,16 @@ from django import template
 from django.conf import settings
 from django.forms import BaseForm, BoundField
 from django.forms.formsets import BaseFormSet
-from django.template import Node, TemplateDoesNotExist
 from django.template.loader import get_template
-from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString, mark_safe
 
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
+    from django.template import Node, TemplateDoesNotExist
     from django.template.backends.base import _EngineTemplate
+    from django.utils.functional import SimpleLazyObject
 
 
 @lru_cache()
@@ -72,7 +71,7 @@ def as_crispy_form(
     else:
         template = uni_form_template(template_pack)
         c["form"] = form
-    ctx = cast(Mapping[int | str | Node, Any], c)
+    ctx = cast("Mapping[int | str | Node, Any]", c)
     return template.render(ctx)
 
 

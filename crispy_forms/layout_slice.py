@@ -65,9 +65,9 @@ class LayoutSlice:
                 if len(positions) == 1:
                     function(self.layout, positions[-1])
                 else:
-                    layout_object = cast(LayoutObject, self.layout.fields[positions[0]])
+                    layout_object = cast("LayoutObject", self.layout.fields[positions[0]])
                     for i in positions[1:-1]:
-                        layout_object = cast(LayoutObject, layout_object.fields[i])
+                        layout_object = cast("LayoutObject", layout_object.fields[i])
 
                     try:
                         function(layout_object, positions[-1])
@@ -111,7 +111,7 @@ class LayoutSlice:
         if isinstance(self.slice, slice):
             # The start of the slice is replaced
             start = self.slice.start if self.slice.start is not None else 0
-            layout_object = cast(LayoutObject, self.layout.fields[self.slice])
+            layout_object = cast("LayoutObject", self.layout.fields[self.slice])
             self.layout.fields[start] = self.wrapped_object(LayoutClass, layout_object, *args, **kwargs)
 
             # The rest of places of the slice are removed, as they are included in the previous
@@ -137,10 +137,10 @@ class LayoutSlice:
                 positions = pointer.positions
 
                 # posistions point to layout objects in the list of fields.
-                layout_object = cast(LayoutObject, self.layout.fields[positions[0]])
+                layout_object = cast("LayoutObject", self.layout.fields[positions[0]])
                 for i in positions[1:]:
                     previous_layout_object = layout_object
-                    layout_object = cast(LayoutObject, layout_object.fields[i])
+                    layout_object = cast("LayoutObject", layout_object.fields[i])
 
                 # If update_attrs is applied to a string, we call to its wrapping layout object
                 if function.__name__ == "update_attrs" and isinstance(layout_object, str):

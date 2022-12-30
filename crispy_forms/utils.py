@@ -6,7 +6,6 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Any, Iterable, Sequence
 
 from django.conf import settings
-from django.forms import BaseForm, BaseFormSet
 from django.forms.utils import flatatt as _flatatt
 from django.template import Context, Node
 from django.template.loader import get_template
@@ -16,6 +15,7 @@ from django.utils.safestring import SafeString
 from .base import KeepContext
 
 if TYPE_CHECKING:
+    from django.forms import BaseForm, BaseFormSet
     from django.template.backends.base import _EngineTemplate
 
     from crispy_forms.helper import FormHelper

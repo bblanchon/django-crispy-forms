@@ -1,15 +1,18 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, Tuple
+from typing import TYPE_CHECKING, Any, Iterable, Tuple
 
 from django import forms, template
 from django.conf import settings
-from django.forms import BoundField, Field
 from django.template import Context, Node, Variable, loader
-from django.template.base import Parser, Token
-from django.utils.safestring import SafeString
 
 from crispy_forms.utils import get_template_pack
+
+if TYPE_CHECKING:
+    from django.forms import BoundField, Field
+    from django.template.base import Parser, Token
+    from django.utils.safestring import SafeString
+
 
 register = template.Library()
 

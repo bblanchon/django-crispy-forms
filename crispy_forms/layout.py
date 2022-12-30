@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Type, cast, list
+from typing import TYPE_CHECKING, Any, Type, cast
 
-from django.forms import BaseForm, BoundField
 from django.template import Context, Node, Template
 from django.template.loader import render_to_string
-from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
+
+if TYPE_CHECKING:
+    from django.forms import BaseForm, BoundField
+    from django.utils.functional import SimpleLazyObject
 
 
 @dataclass
@@ -104,7 +106,7 @@ class LayoutObject(TemplateNameMixin):
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
                 if str_class:
-                    layout_object = cast(str, layout_object)
+                    layout_object = cast("str", layout_object)
                     pointers.append(Pointer(index + [i], layout_object))
                 else:
                     pointers.append(Pointer(index + [i], layout_object.__class__.__name__.lower()))

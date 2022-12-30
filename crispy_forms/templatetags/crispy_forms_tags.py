@@ -5,19 +5,19 @@ from typing import TYPE_CHECKING, Any
 
 from django import template
 from django.conf import settings
-from django.forms import BaseForm
 from django.forms.formsets import BaseFormSet
-from django.template import Context
-from django.template.base import Node, Parser, Token
 from django.template.loader import get_template
-from django.utils.functional import SimpleLazyObject
-from django.utils.safestring import SafeString
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
 if TYPE_CHECKING:
+    from django.forms import BaseForm
+    from django.template import Context
     from django.template.backends.base import _EngineTemplate
+    from django.template.base import Node, Parser, Token
+    from django.utils.functional import SimpleLazyObject
+    from django.utils.safestring import SafeString
 
 
 register = template.Library()

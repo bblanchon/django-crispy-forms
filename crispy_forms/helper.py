@@ -1,18 +1,20 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Type, cast
+from typing import TYPE_CHECKING, Any, Type, cast
 
-from django.forms import BaseForm, Widget
-from django.template import Context
 from django.urls import NoReverseMatch, reverse
-from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString, mark_safe
 
 from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import BaseInput, Layout, LayoutObject
 from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_field
+
+if TYPE_CHECKING:
+    from django.forms import BaseForm, Widget
+    from django.template import Context
+    from django.utils.functional import SimpleLazyObject
 
 
 class DynamicLayoutHandler:
@@ -33,7 +35,7 @@ class DynamicLayoutHandler:
         Returns all layout objects of first level of depth
         """
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         return LayoutSlice(layout, slice(0, len(layout.fields), 1))
 
     def filter(self, *LayoutClasses: Type[LayoutObject], max_level: int = 0, greedy: bool = False) -> LayoutSlice:
@@ -41,7 +43,7 @@ class DynamicLayoutHandler:
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         filtered_layout_objects = layout.get_layout_objects(*LayoutClasses, max_level=max_level, greedy=greedy)
 
         return LayoutSlice(layout, filtered_layout_objects)
@@ -51,8 +53,8 @@ class DynamicLayoutHandler:
         Returns a LayoutSlice pointing to fields with widgets of `widget_type`
         """
         self._check_layout_and_form()
-        layout = cast(Layout, self.layout)
-        form = cast(BaseForm, self.form)
+        layout = cast("Layout", self.layout)
+        form = cast("BaseForm", self.form)
         layout_field_names = layout.get_field_names()
 
         # Let's filter all fields with widgets like widget_type
@@ -68,8 +70,8 @@ class DynamicLayoutHandler:
         Returns a LayoutSlice pointing to fields with widgets NOT matching `widget_type`
         """
         self._check_layout_and_form()
-        layout = cast(Layout, self.layout)
-        form = cast(BaseForm, self.form)
+        layout = cast("Layout", self.layout)
+        form = cast("BaseForm", self.form)
         layout_field_names = layout.get_field_names()
         # Let's exclude all fields with widgets like widget_type
         filtered_fields = []
@@ -92,7 +94,7 @@ class DynamicLayoutHandler:
                 return getattr(self, key)
 
             self._check_layout()
-            layout = cast(Layout, self.layout)
+            layout = cast("Layout", self.layout)
             layout_field_names = layout.get_field_names()
 
             filtered_field = []
@@ -104,17 +106,17 @@ class DynamicLayoutHandler:
             return LayoutSlice(layout, filtered_field)
 
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         return LayoutSlice(layout, key)
 
     def __setitem__(self, key: int, value: str | LayoutObject) -> None:
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         layout[key] = value
 
     def __delitem__(self, key: int) -> None:
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         del layout.fields[key]
 
     def __len__(self) -> int:
@@ -297,7 +299,7 @@ class FormHelper(DynamicLayoutHandler):
 
         # This renders the specified Layout strictly
         self._check_layout()
-        layout = cast(Layout, self.layout)
+        layout = cast("Layout", self.layout)
         html = layout.render(form, context, template_pack=template_pack)
 
         # Rendering some extra fields if specified

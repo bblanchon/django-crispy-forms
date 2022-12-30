@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING
 
 from django import template
-from django.template import Context
-from django.template.base import Parser, Token
 from django.utils.encoding import force_str
 from django.utils.functional import keep_lazy
+
+if TYPE_CHECKING:
+    from django.template import Context
+    from django.template.base import Parser, Token
+
 
 register = template.Library()
 
