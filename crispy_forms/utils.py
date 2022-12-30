@@ -21,6 +21,8 @@ if TYPE_CHECKING:
     from crispy_forms.helper import FormHelper
     from crispy_forms.layout import HTML, BaseInput, LayoutObject
 
+    ContextDict = dict[int | str | Node, Any]
+
 
 def get_template_pack() -> str:
     return getattr(settings, "CRISPY_TEMPLATE_PACK")
@@ -45,7 +47,7 @@ def render_field(  # noqa: C901
     layout_object: LayoutObject | None = None,
     attrs: dict[str, str] | Sequence[dict[str, str]] | None = None,
     template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
-    extra_context: dict[int | str | Node, Any] | None = None,
+    extra_context: ContextDict | None = None,
 ) -> SafeString:
     """
     Renders a django-crispy-forms field

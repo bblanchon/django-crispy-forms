@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Iterable, Tuple
+from typing import TYPE_CHECKING, Iterable, Tuple
 
 from django import forms, template
 from django.conf import settings
-from django.template import Context, Node, Variable, loader
+from django.template import Context, Variable, loader
 
 from crispy_forms.utils import get_template_pack
 
@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from django.template.base import Parser, Token
     from django.utils.safestring import SafeString
 
+    from crispy_forms.utils import ContextDict
 
 register = template.Library()
 
@@ -169,7 +170,7 @@ def crispy_addon(
     if field:
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
-        context: dict[int | str | Node, Any] = {
+        context: ContextDict = {
             "field": field,
             "form_show_errors": True,
             "form_show_labels": form_show_labels,

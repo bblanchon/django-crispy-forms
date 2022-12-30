@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from django.forms import BaseForm
     from django.utils.functional import SimpleLazyObject
 
+    from crispy_forms.utils import ContextDict
+
 
 class PrependedAppendedText(Field):
     """
@@ -100,7 +102,7 @@ class PrependedAppendedText(Field):
         form: BaseForm,
         context: Context,
         template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
-        extra_context: dict[int | str | Node, Any] | None = None,
+        extra_context: ContextDict | None = None,
         **kwargs: Any,
     ) -> SafeString:
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -507,7 +509,7 @@ class FieldWithButtons(Div):
         form: BaseForm,
         context: Context,
         template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
-        extra_context: dict[int | str | Node, Any] | None = None,
+        extra_context: ContextDict | None = None,
         **kwargs: Any,
     ) -> SafeString:
         # We first render the buttons

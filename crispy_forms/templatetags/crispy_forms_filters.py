@@ -19,6 +19,8 @@ if TYPE_CHECKING:
     from django.template.backends.base import _EngineTemplate
     from django.utils.functional import SimpleLazyObject
 
+    from crispy_forms.utils import ContextDict
+
 
 @lru_cache()
 def uni_formset_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
@@ -92,7 +94,7 @@ def as_crispy_errors(
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
-        c: dict[int | str | Node, Any] = {"formset": form}
+        c: ContextDict = {"formset": form}
     else:
         template = get_template("%s/errors.html" % template_pack)
         c = {"form": form}
@@ -122,7 +124,7 @@ def as_crispy_field(
     if not isinstance(field, BoundField) and settings.DEBUG:  # type: ignore [unreachable]
         raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
 
-    attributes: dict[int | str | Node, Any] = {
+    attributes: ContextDict = {
         "field": field,
         "form_show_errors": True,
         "form_show_labels": True,

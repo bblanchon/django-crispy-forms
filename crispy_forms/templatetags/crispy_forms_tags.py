@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django import template
 from django.conf import settings
@@ -15,10 +15,11 @@ if TYPE_CHECKING:
     from django.forms import BaseForm
     from django.template import Context
     from django.template.backends.base import _EngineTemplate
-    from django.template.base import Node, Parser, Token
+    from django.template.base import Parser, Token
     from django.utils.functional import SimpleLazyObject
     from django.utils.safestring import SafeString
 
+    from crispy_forms.utils import ContextDict
 
 register = template.Library()
 
@@ -145,7 +146,7 @@ class BasicNode(template.Node):
 
         return final_context
 
-    def get_response_dict(self, helper: FormHelper, context: Context, is_formset: bool) -> dict[int | str | Node, Any]:
+    def get_response_dict(self, helper: FormHelper, context: Context, is_formset: bool) -> ContextDict:
         """
         Returns a dictionary with all the parameters necessary to render the form/formset in a template.
 
@@ -161,7 +162,7 @@ class BasicNode(template.Node):
             form_type = "formset"
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
-        response_dict: dict[int | str | Node, Any] = {
+        response_dict: ContextDict = {
             "%s_action" % form_type: attrs["attrs"].get("action", ""),
             "%s_attrs" % form_type: attrs.get("attrs", ""),
             "%s_class" % form_type: attrs["attrs"].get("class", ""),
