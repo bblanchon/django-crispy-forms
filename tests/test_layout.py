@@ -283,6 +283,7 @@ def test_i18n() -> None:
 
 def test_default_layout() -> None:
     test_form = SampleForm()
+    assert test_form.helper.layout is not None
     assert test_form.helper.layout.fields == [
         "is_company",
         "email",
@@ -296,6 +297,7 @@ def test_default_layout() -> None:
 
 def test_default_layout_two() -> None:
     test_form = SampleForm3()
+    assert test_form.helper.layout is not None
     assert test_form.helper.layout.fields == ["email"]
 
 

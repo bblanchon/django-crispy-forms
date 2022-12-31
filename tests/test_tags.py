@@ -216,8 +216,12 @@ def test_crispy_addon() -> None:
     field_instance = test_form.fields["email"]
     bound_field = BoundField(test_form, field_instance, "email")
 
-    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
-    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
+    html = crispy_addon(bound_field, prepend="Work", append="Primary")
+    assert html is not None
+    assert "input-group-addon" in html
+    html = crispy_addon(bound_field, prepend="Work", append="Secondary")
+    assert html is not None
+    assert "input-group-addon" in html
 
     # errors
     with pytest.raises(TypeError):
