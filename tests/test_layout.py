@@ -32,6 +32,8 @@ from .utils import parse_expected, parse_form
 if TYPE_CHECKING:
     from pytest_django.fixtures import SettingsWrapper
 
+    from crispy_forms.utils import ContextDict
+
 
 def test_invalid_unicode_characters(settings: SettingsWrapper) -> None:
     # Adds a BooleanField that uses non valid unicode characters "ñ"
@@ -348,7 +350,7 @@ def test_keepcontext_context_manager() -> None:
     form = CheckboxesSampleForm()
     # We use here InlineCheckboxes as it updates context in an unsafe way
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
-    context = {"form": form}
+    context: ContextDict = {"form": form}
 
     response = render(request=None, template_name="crispy_render_template.html", context=context)
 
