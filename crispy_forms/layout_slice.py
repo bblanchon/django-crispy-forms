@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Type, cast
+from typing import TYPE_CHECKING, Any, Callable, Type, cast
 
 from crispy_forms.bootstrap import Container
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, Layout, LayoutObject, MultiField, Pointer
+
+if TYPE_CHECKING:
+    from crispy_forms.layout import LayoutObjectFields
 
 
 class LayoutSlice:
@@ -21,7 +24,7 @@ class LayoutSlice:
     def wrapped_object(
         self,
         LayoutClass: Type[LayoutObject],
-        fields: list[str | LayoutObject] | str | LayoutObject,
+        fields: list[LayoutObjectFields] | LayoutObjectFields,
         *args: str,
         **kwargs: str,
     ) -> LayoutObject:

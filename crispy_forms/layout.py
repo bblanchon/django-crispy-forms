@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Type, cast
+from typing import TYPE_CHECKING, Any, Type, TypeAlias, Union, cast
 
 from django.template import Context, Node, Template
 from django.template.loader import render_to_string
@@ -14,6 +14,8 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
 if TYPE_CHECKING:
     from django.forms import BaseForm, BoundField
     from django.utils.functional import SimpleLazyObject, _StrPromise
+
+    LayoutObjectFields: TypeAlias = Union["LayoutObject", "HTML", "BaseInput", str]
 
 
 @dataclass
@@ -35,14 +37,14 @@ class TemplateNameMixin:
 
 
 class LayoutObject(TemplateNameMixin):
-    fields: list[str | LayoutObject]
+    fields: list[LayoutObjectFields]
     bound_fields: list[BoundField]
     attrs: dict[str, str]
 
-    def __getitem__(self, slice: int) -> str | LayoutObject:
+    def __getitem__(self, slice: int) -> LayoutObjectFields:
         return self.fields[slice]
 
-    def __setitem__(self, slice: int, value: str | LayoutObject) -> None:
+    def __setitem__(self, slice: int, value: LayoutObjectFields) -> None:
         self.fields[slice] = value
 
     def __delitem__(self, slice: int) -> None:
@@ -76,7 +78,7 @@ class LayoutObject(TemplateNameMixin):
 
     def get_layout_objects(
         self,
-        *LayoutClasses: Type[str] | Type[LayoutObject],
+        *LayoutClasses: Type[LayoutObjectFields],
         index: list[int] | int | None = None,
         max_level: int = 0,
         greedy: bool = False,
@@ -170,7 +172,7 @@ class Layout(LayoutObject):
         )
     """
 
-    def __init__(self, *fields: LayoutObject | str) -> None:
+    def __init__(self, *fields: LayoutObjectFields) -> None:
         self.fields = list(fields)
 
     def render(
@@ -230,7 +232,7 @@ class ButtonHolder(LayoutObject):
         css_class: str | None = None,
         template: str | None = None,
     ):
-        self.fields = list(fields)  # type: ignore [arg-type]
+        self.fields = list(fields)
         self.css_id = css_id
         self.css_class = css_class
         self.template = template or self.template
@@ -638,7 +640,7 @@ class Fieldset(LayoutObject):
     def __init__(
         self,
         legend: str | _StrPromise,
-        *fields: str,
+        *fields: LayoutObjectFields,
         css_class: str | None = None,
         css_id: str | None = None,
         template: str | None = None,
@@ -825,7 +827,7 @@ class Div(LayoutObject):
 
     def __init__(
         self,
-        *fields: LayoutObject | str,
+        *fields: LayoutObjectFields,
         css_id: str | None = None,
         css_class: str | None = None,
         template: str | None = None,

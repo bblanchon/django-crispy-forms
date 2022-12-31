@@ -320,7 +320,7 @@ class FormActions(LayoutObject):
         template: str | None = None,
         **kwargs: str,
     ) -> None:
-        self.fields = list(fields)  # type: ignore [arg-type]
+        self.fields = list(fields)
         self.id = css_id
         self.css_class = css_class
         self.template = template or self.template
