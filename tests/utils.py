@@ -9,7 +9,7 @@ from django.test.html import Element, parse_html
 from crispy_forms.utils import render_crispy_form
 
 if TYPE_CHECKING:
-    from django.forms import BaseForm
+    from django.forms import BaseForm, BaseFormSet
 
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,6 +21,6 @@ def parse_expected(expected_file: str) -> Element:
         return parse_html(f.read())
 
 
-def parse_form(form: BaseForm) -> Element:
+def parse_form(form: BaseForm | BaseFormSet[BaseForm]) -> Element:
     html = render_crispy_form(form)
     return parse_html(html)
