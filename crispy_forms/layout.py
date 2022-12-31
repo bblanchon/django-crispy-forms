@@ -13,7 +13,7 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
 
 if TYPE_CHECKING:
     from django.forms import BaseForm, BoundField
-    from django.utils.functional import SimpleLazyObject
+    from django.utils.functional import SimpleLazyObject, _StrPromise
 
 
 @dataclass
@@ -637,7 +637,7 @@ class Fieldset(LayoutObject):
 
     def __init__(
         self,
-        legend: str,
+        legend: str | _StrPromise,
         *fields: str,
         css_class: str | None = None,
         css_id: str | None = None,
@@ -972,7 +972,7 @@ class HTML:
         HTML('<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />')
     """
 
-    def __init__(self, html: str) -> None:
+    def __init__(self, html: str | _StrPromise) -> None:
         self.html = html
 
     def render(
