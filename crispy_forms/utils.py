@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Iterable, Sequence
+from typing import TYPE_CHECKING, Any, Iterable, Sequence, TypeVar
 
 from django.conf import settings
 from django.forms.utils import flatatt as _flatatt
@@ -193,12 +193,16 @@ def list_intersection(list1: list[Any], list2: list[Any]) -> list[Any]:
     return [item for item in list1 if item in list2]
 
 
-def list_difference(left: Iterable[str], right: Iterable[str]) -> list[str]:
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+
+
+def list_difference(left: Iterable[T1], right: Iterable[T2]) -> list[T1 | T2]:
     """
     Take the not-in-place difference of two lists (left - right), similar to sets but preserving order.
     """
-    blocked = set(right)
-    difference = []
+    blocked: set[T1 | T2] = set(right)
+    difference: list[T1 | T2] = []
     for item in left:
         if item not in blocked:
             blocked.add(item)
