@@ -135,7 +135,7 @@ def test_template_context() -> None:
         "autocomplete": "off",
     }
     node = CrispyFormNode("form", "helper")
-    context = node.get_response_dict(helper, {}, False)
+    context = node.get_response_dict(helper, Context(), False)
 
     assert context["form_id"] == "test-form"
     assert context["form_attrs"]["id"] == "test-form"
@@ -152,7 +152,7 @@ def test_template_context_using_form_attrs() -> None:
     helper.form_class = "test-forms"
     helper.form_action = "submit/test/form"
     node = CrispyFormNode("form", "helper")
-    context = node.get_response_dict(helper, {}, False)
+    context = node.get_response_dict(helper, Context(), False)
 
     assert context["form_id"] == "test-form"
     assert context["form_attrs"]["id"] == "test-form"
